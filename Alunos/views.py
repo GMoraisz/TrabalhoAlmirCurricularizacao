@@ -22,6 +22,7 @@ class AlunosListView(ListView):
 class AlunoDetailView(DetailView):
     model = Aluno
     template_name = 'Aluno_detail.html'
+    context_object_name = 'aluno'
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -39,11 +40,11 @@ class AlunoUpdateView(UpdateView):
     template_name = 'Aluno_update.html'
 
     def get_success_url(self):
-        return reverse_lazy('Aluno_detail', kwargs={'pk': self.object.pk})
+        return reverse_lazy('aluno_detail', kwargs={'pk': self.object.pk})
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class AlunoDeleteView(DeleteView):
     model = Aluno
     template_name = 'Aluno_delete.html'
-    success_url = reverse_lazy('Alunos_list')
+    success_url = reverse_lazy('alunos_list')

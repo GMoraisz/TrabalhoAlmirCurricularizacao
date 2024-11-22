@@ -1,114 +1,145 @@
 {% block content %}
   <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f8ff;
+      margin: 0;
+      padding: 20px;
+    }
+
     .aluno-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 20px;
-      margin: 0 auto;
-      max-width: 1200px;
       padding: 20px;
     }
 
     .aluno-card {
-      background-color: #e3e1e1;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
       overflow: hidden;
       text-align: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       transition: all 0.3s ease;
     }
 
     .aluno-card:hover {
-        cursor: pointer;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-        transform: translateY(-2px);
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+      transform: translateY(-4px);
     }
 
     .aluno-card img {
       width: 100%;
-      height: 200px;
+      height: 150px;
       object-fit: cover;
-    }
-
-    .aluno-card h3 {
-        font-size: 20px;
-        margin-top: 10px;
-        margin-bottom: 5px;
+      border-bottom: 2px solid #0096c7;
     }
 
     .aluno-card h2 {
-      font-size: 1.5rem;
-      margin: 10px;
+      font-size: 1.4rem;
+      margin: 10px 15px;
+      color: #0096c7;
     }
 
     .aluno-card p {
-      font-size: 1rem;
-      margin-bottom: 10px;
+      font-size: 0.95rem;
+      margin: 5px 15px;
+      color: #333333;
     }
 
-    @media (max-width: 768px) {
-      .aluno-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .buttons-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px 0;
     }
 
-    form {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 20px;
-        text-align: center;
-        padding: 20px;
+    .btn {
+      display: inline-block;
+      background-color: #0096c7;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+      text-decoration: none !important;
     }
 
-    input[type="text"] {
-        padding: 10px;
-        font-size: 16px;
-        border: 2px solid #e3e1e1;
-        border-radius: 4px;
-        margin-right: 10px;
-        transition: border-bottom-color 0.3s ease-in-out;
+    .btn:hover {
+      background-color: #007ba7;
     }
 
-    input[type="text"]:focus {
-        outline: none;
-        border-bottom-color: #e3e1e1;
+    .btn-danger {
+      background-color: #d9534f;
     }
 
-    button[type="submit"] {
-        background-color: #0096c7;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s ease-in-out;
+    .btn-danger:hover {
+      background-color: #b52e26;
     }
 
-    button[type="submit"]:hover {
-        background-color: #108eb8;
+    .search-form {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .search-form input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      width: 300px;
+      margin-right: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    .search-form button {
+      padding: 10px 16px;
+      font-size: 16px;
+      background-color: #0096c7;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .search-form button:hover {
+      background-color: #007ba7;
+    }
+
+    .no-results {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #ff5722;
     }
   </style>
 
-  <form method="GET" action="{% url 'Alunos_list' %}">
-    <input type="text" name="search" placeholder="Buscar aluno...">
-    <button type="submit">Buscar</button>
-  </form>
+  <div class="search-form">
+    <form method="GET" action="{% url 'Alunos_list' %}">
+      <input type="text" name="search" placeholder="Buscar aluno..." value="{{ request.GET.search }}">
+      <button type="submit">Buscar</button>
+    </form>
+  </div>
 
   <div class="aluno-grid">
-    {% if Alunos %}
-      {% for Aluno in Alunos %}
+    {% if alunos %}
+      {% for aluno in alunos %}
         <div class="aluno-card">
-          {% if Aluno.photo %}
-            <img src="{{ Aluno.photo.url }}" alt="{{ Aluno.nome }}">
+          {% if aluno.photo %}
+            <img src="{{ aluno.photo.url }}" alt="Foto de {{ aluno.nome }}">
           {% else %}
             <img src="https://via.placeholder.com/200" alt="Foto não disponível">
           {% endif %}
-          <h2>{{ Aluno.nome }}</h2>
-          <p>CPF: {{ Aluno.cpf }}</p>
-          <p>Nascimento: {{ Aluno.nascimento }}</p>
-          <p>Endereço: {{ Aluno.endereco }}</p>
+          <h2>{{ aluno.nome }}</h2>
+          <p><strong>CPF:</strong> {{ aluno.cpf }}</p>
+          <p><strong>Data de Nascimento:</strong> {{ aluno.nascimento }}</p>
+          <p><strong>Endereço:</strong> {{ aluno.endereco }}</p>
+          <div class="buttons-container">
+            <a href="{% url 'Aluno_update' aluno.pk %}" class="btn">Editar</a>
+            <a href="{% url 'Aluno_delete' aluno.pk %}" class="btn btn-danger">Deletar</a>
+          </div>
         </div>
       {% endfor %}
     {% else %}

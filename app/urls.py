@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView  # Import necessário
 from Alunos.views import AlunosListView, NewAlunoCreateView, AlunoDetailView, AlunoUpdateView, AlunoDeleteView
 from accounts.views import register_view, login_view, logout_view
 
@@ -15,4 +16,5 @@ urlpatterns = [
     path('Aluno/<int:pk>/', AlunoDetailView.as_view(), name='Aluno_detail'),
     path('Aluno/<int:pk>/update/', AlunoUpdateView.as_view(), name='Aluno_update'),
     path('Aluno/<int:pk>/delete/', AlunoDeleteView.as_view(), name='Aluno_delete'),
+    path('', TemplateView.as_view(template_name="alunos.html"), name='home'),  # Página inicial
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
