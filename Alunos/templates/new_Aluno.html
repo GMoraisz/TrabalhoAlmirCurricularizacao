@@ -3,51 +3,13 @@
 {% block title %}Cadastrar Novo Aluno{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card shadow-lg mt-4">
-                    <div class="card-header bg-primary text-white text-center">
-                        <h3>Cadastro de Aluno</h3>
-                    </div>
-                    <div class="card-body">
-                        <!-- Exibir erros de validação -->
-                        {% if form.errors %}
-                            <div class="alert alert-danger">
-                                <ul>
-                                    {% for field in form %}
-                                        {% for error in field.errors %}
-                                            <li>{{ error }}</li>
-                                        {% endfor %}
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        {% endif %}
+    <h2>Cadastro de Aluno</h2>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Exibe o formulário de cadastro -->
+        
+        <input type="submit" value="Cadastrar" class="btn btn-primary">
+    </form>
 
-                        <form method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <!-- Renderizando cada campo do formulário individualmente para controle de classes -->
-                                {% for field in form %}
-                                    <div class="mb-3">
-                                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                                        {{ field }}
-                                        <!-- Exibe o erro abaixo do campo, caso exista -->
-                                        {% if field.errors %}
-                                            <div class="text-danger">
-                                                {% for error in field.errors %}
-                                                    <small>{{ error }}</small><br>
-                                                {% endfor %}
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 {% endblock %}

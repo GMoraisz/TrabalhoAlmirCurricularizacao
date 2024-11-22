@@ -7,11 +7,26 @@ class Aluno(models.Model):
     cpf = models.CharField(max_length=14, unique=True, null=True, blank=True)
     nascimento = models.DateField()
     endereco = models.CharField(max_length=255, null=True, blank=True)
-    responsavel = models.ForeignKey('Responsavel', on_delete=models.SET_NULL, null=True, blank=True)  # Ligação com Responsavel
+    responsavel = models.ForeignKey('Responsavel', on_delete=models.SET_NULL, null=True, blank=True) 
+    idade = models.CharField(max_length=2, unique=True, null=True, blank=True)
     photo = models.ImageField(upload_to='Alunos/', blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.nome
+    
+    
+class AlunoInventory(models.Model):
+    Alunos_count = models.IntegerField()
+    Alunos_value = models.FloatField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        
+    def __str__(self):
+        return f'{self.Alunos_cout} - {self.Alunos_value}'
+        
 
 # Tabela Responsavel
 class Responsavel(models.Model):
